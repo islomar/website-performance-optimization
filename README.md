@@ -6,16 +6,19 @@ Udacity course "Website Performance Optimization"
 ####Course materials
 Tips and tricks :https://www.udacity.com/wiki/ud884
 
+
 ###Tools used
 * ngrok: https://ngrok.com/
 * PageSpeed Insights: https://developers.google.com/speed/pagespeed/insights/
 * Chrome Canary
 * Remote debugging of Android with Chrome: https://developer.chrome.com/devtools/docs/remote-debugging
 
+
 ####Website Performance Optimization portfolio project
 * https://github.com/udacity/frontend-nanodegree-mobile-portfolio
   * python -m SimpleHTTPServer 8080
   * `ngrok http 8080`
+
 
 ##Lesson 1: The Critical Rendering Path
 ###The DOM
@@ -24,6 +27,7 @@ Tips and tricks :https://www.udacity.com/wiki/ud884
 * First, we grab the HTML and start building the DOM. We then fetch the CSS and build the CSS Object Model; we combine those two, in order to render the tree:
 DOM ----> CSSOM --> Render tree --> Layout --> Paint
 |-JavaScript-|
+
 
 ###Converting HTML to the DOM
 * Constructing the DOM: https://developers.google.com/web/fundamentals/performance/critical-rendering-path/constructing-the-object-model#document-object-model-dom
@@ -36,6 +40,7 @@ DOM ----> CSSOM --> Render tree --> Layout --> Paint
 * Eventually, once we consume all the tokens, we arrive to the DOM, which is a tree structure with all the nodes and properties.
 * The DOM is the full part representation of the HTML markup
 
+
 ###Fast Google Search Responses
 * Incremental HTML delivery
   * Flushing the document early: http://www.stevesouders.com/blog/2009/05/18/flushing-the-document-early/
@@ -45,9 +50,11 @@ DOM ----> CSSOM --> Render tree --> Layout --> Paint
   * http://blog.cowchimp.com/chunk-scatter-http-chunked-response-analysis-tool/
   * http://scatter.cowchimp.com/
 
+
 ###Exploring Timeline Traces
 * https://developer.chrome.com/devtools/docs/timeline
 * DevTools emulation docs: https://developer.chrome.com/devtools/docs/device-mode
+
 
 ###Converting CSS to CSSOM
 * The CSS are converted to tokens, and those to nodes and a DOM
@@ -63,17 +70,58 @@ DOM ----> CSSOM --> Render tree --> Layout --> Paint
   * http://stackoverflow.com/questions/5797014/why-do-browsers-match-css-selectors-from-right-to-left
 * A more specific CSS rule is more expensive because it has to traverse more nodes.
 
+
 ###Recalculating CSS Styles in DevTools
 * Saving and loading recordings
   * https://developer.chrome.com/devtools/docs/timeline#saving-and-loading-recordings
 
+
 ###The render tree
-* Demo page
+* Demo page: http://udacity-crp.herokuapp.com/cssom.html
 * https://developers.google.com/web/fundamentals/performance/critical-rendering-path/render-tree-construction
 * It only captures visible content.
 * The CSSOM and DOM trees are combined into a render tree, which is then used to compute the layout of each visible element and serves as an input to the paint process which renders the pixels to screen. 
 
+
 ###Layout
+* Always use the meta tag "viewport": `<meta name="viewport" content="width=device-width">`
+* Layout computes the exact position and size of each object.
+* Responsive web design basics: https://developers.google.com/web/fundamentals/design-and-ui/responsive/fundamentals/
+
+
+###Paint
+* Paint is the last step that takes in the final render tree and renders the pixels to the screen.
+* We can finally pass this information to our final stage which will convert each node in the render tree to actual pixels on the screen - this step is often referred to as “painting” or “rasterizing.”
+
+
+###Analyzing Layout in DevTools
+* Layout can be triggered by device orientation change on mobile, a window resize, or any other action that modifies the content of the DOM - e.g. adding or removing content from the DOM tree, toggling CSSOM properties on a node, and so on!
+* Expensive Layouts post: https://discussions.udacity.com/t/expensive-layouts/16165?_ga=1.152352697.1474336584.1464813511
+
+###Recap
+Let’s do a quick recap of all the steps the browser went through:
+1. Process HTML markup and build the **DOM tree**.
+2. Process CSS markup and build the **CSSOM tree**.
+3. Combine the DOM and CSSOM into a **render tree**.
+4. Run **layout** on the render tree to compute geometry of each node.
+5. **Paint** the individual nodes to the screen.
+* Optimizing the critical rendering path is the process of minimizing the total amount of time spent in steps 1 through 5 in the above sequence.
+* Share a timeline link: http://www.webpagetest.org/
+
+* Process for rendering a page:
+1. Begin constructing a DOM by parsing HTML.
+2. Request CSS and JS resources.
+3. Parse CSS and construct CSSOMt tree.
+4. Execute JS.
+5. Merge DOM and CSSOM into the Render Tree.
+6. Run layout, paint.
+
+* Link to Optimization Suggestions forum discussion: 
+https://discussions.udacity.com/t/optimization-suggestions/16163?_ga=1.145005748.1474336584.1464813511
+
+
+##Lesson 2: Optimizing the CRP
+###Optimizing the DOM
 
 
 ##Interesting links
